@@ -1,0 +1,112 @@
+include ../head.pug
+body
+  .container.mt-5.p-5.rounded-circle.shadow-lg.bg-white
+    h1.text-center.mb-4 #{mode} Challenge
+    form
+      .form-group.mb-3
+        label(for="challengeName" class="form-label") Challenge Name
+        input(type="text" class="form-control" id="challengeName" name="challengeName" placeholder="Enter challenge name" required)
+      .form-group.mb-3
+        label(for="challengeDescription" class="form-label") Challenge Type
+        input(type="text" class="form-control" id="challengeDescription" name="challengeDescription" placeholder="Enter challenge type" required)
+      .form-group.mb-3
+        label(for="challengeDate" class="form-label") Challenge Date/Time
+        .input-group.date(id="datetimepicker1" data-target-input="nearest")
+          input(type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" id="challengeDate" name="challengeDate" placeholder="Select challenge date/time" required)
+          .input-group-append(data-target="#datetimepicker1" data-toggle="datetimepicker")
+            .input-group-text
+              i.fas.fa-calendar-alt
+      .form-group.mb-3
+        label(for="challengeDuration" class="form-label") Duration
+        input(type="text" class="form-control" id="challengeDuration" name="challengeDuration" placeholder="Enter challenge duration" required)
+      .form-group.mb-3
+        label(for="challengeRules" class="form-label") Rules
+        input(type="text" class="form-control" id="challengeRules" name="challengeRules" placeholder="Enter challenge rules" required)
+
+      .d-flex.justify-content-between
+        button(type="button" class="btn btn-success" onclick="submitForm()") #{mode === 'Update' ? 'Update' : 'Add'}
+        button(type="button" class="btn btn-primary" onclick="window.location.href='/'") Back to list
+
+  script.
+    const format = 'DD/MM/YYYY HH:mm'
+    const picker = new tempusDominus.TempusDominus(document.getElementById('datetimepicker1'), {
+        localization: {
+            locale: 'en'
+        }
+    })
+    picker.dates.formatInput = function(date) {
+        return moment(date).format(format)
+    }
+
+    if ("#{mode}" === "Update") {
+      const challengeData = !{JSON.stringify(challengeData || {})}.challenge;
+      document.getElementById('challengeName').value = challengeData.challengeName || '';
+      document.getElementById('challengeDescription').value = challengeData.challengeDescription || '';
+      picker.dates.setValue(new tempusDominus.DateTime(moment(challengeData.challengeDate, format)));
+      document.getElementById('challengeDuration').value = challengeData.challengeDuration || '';
+      document.getElementById('challengeRules').value = challengeData.challengeRules || '';
+    }
+
+    function submitForm() {
+      const challengeData = {
+        challengeName: document.getElementById('challengeName').value,
+        challengeDescription: document.getElementById('challengeDescription').value,
+        challengeDate: document.getElementById('challengeDate').value,
+        challengeDuration: document.getElementById('challengeDuration').value,
+        challengeRules: document.getElementById('challengeRules').value,
+      };
+
+      const url = "#{mode}" === "Update" ? `/api/challenge/${!{JSON.stringify(challengeData || {})}.id}` : '/api/challenge';
+      const method = "#{mode}" === "Update" ? 'put' : 'post';
+
+      axios[method](url, challengeData).then(response => {
+        alert('Success!');
+        location.href = '/'
+      })
+      .catch(error => {
+        if (error.response)
+          alert(JSON.stringify(error.response.data.errors))
+        else
+          alert(error)
+      });
+    }
+
+style.
+  body {
+    background-color: gray;
+    background-image: url('https://wallpapershigh.com/wp-content/uploads/gym-hall-3.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    width: 700px;
+    height: 700px;
+    background-color: rgba(255, 255, 200, 0.8);
+    padding: 40px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-group label {
+    font-weight: bold;
+  }
+
+  .btn-success, .btn-primary {
+    background-color: rgb(255,0,0);
+    color: white;
+    border: none;
+    border-radius: 10px;
+  }
+
+  .btn-success:hover, .btn-primary:hover {
+    background-color: lightcoral; 
+  }

@@ -1,0 +1,54 @@
+* {
+    font-family: "Poppins", sans-serif;
+    color: black;
+    font-size: 18px;
+  }
+  
+  body {
+    background-color: lightgray;
+    background-image: url(https://t3.ftcdn.net/jpg/04/29/35/62/360_F_429356296_CVQ5LkC6Pl55kUNLqLisVKgTw9vjyif1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    margin: 0; 
+    padding: 0; 
+  }
+  
+  .container.mt-5 {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  table.table {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+  }
+  
+  thead {
+    background-color: rgb(196, 25, 3);
+    color: white;
+  }
+  
+  .btn-success, .btn-primary, .btn-danger {
+    background-color: white;
+    color: black;
+    border: 1px solid rgb(211, 28, 8);
+    border-radius: 10px;
+  }
+  
+  .btn-success:hover, .btn-primary:hover, .btn-danger:hover {
+    background-color: rgb(255, 34, 5);
+    color: white;
+  }
+  
+  h1.text-primary {
+    color: rgb(226, 9, 9) !important;
+  }
+  
+  .btn-sm {
+    margin-right: 5px;
+  }
+  

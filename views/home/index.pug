@@ -1,0 +1,59 @@
+include ../head.pug
+body
+  .container.mt-5
+    .row.d-flex.align-items-center.mb-4
+      .col-md-6
+        h1.text-primary.text-center List of Challenges
+      .col-md-6.text-end
+        a.btn.btn-success(href='/add', role='button') Add New Challenge
+    table.table.table-responsive.table-hover.table-striped.table-bordered.table-light.shadow-sm
+      thead
+        tr.bg-primary.text-white
+          th(scope="col") ID
+          th(scope="col") Name
+          th(scope="col") Description
+          th(scope="col") Date/Time
+          th(scope="col") Duration
+          th(scope="col") Rules
+          th(scope="col") Actions
+      tbody
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      axios.get('/api/challenge').then(function(response) {
+        const challenges = response.data;
+        const tableBody = document.querySelector('table tbody');
+        challenges.forEach(c => {
+          const row = document.createElement('tr');
+          const challenge = c.challenge;
+          row.innerHTML = `
+            <td>${c.id}</td>
+            <td>${challenge.challengeName}</td>
+            <td>${challenge.challengeDescription}</td>
+            <td>${challenge.challengeDate}</td>
+            <td>${challenge.challengeDuration}</td>
+            <td>${challenge.challengeRules}</td>
+            <td>
+              <button class="btn btn-primary btn-sm me-2" data-id="${c.id}" onclick="window.location.href='/update/${c.id}'">Update</button>
+              <button class="btn btn-danger btn-sm" data-id="${c.id}">Delete</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+      document.addEventListener('click', function(event) {
+        if (event.target && event.target.classList.contains('btn-danger')) {
+          const challengeId = event.target.getAttribute('data-id');
+          axios.delete(`/api/challenge/${challengeId}`).then(function(response) {
+            alert('Deleted successfully');
+            location.reload();
+          })
+          .catch(function(error) {
+            alert('Error while deleting challenge: ' + error);
+          });
+        }
+      });
+    });
