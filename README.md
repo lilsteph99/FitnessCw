@@ -2,3 +2,4 @@ It's a common fitness project where you can paticipate in different kind of chal
 
 Here is a link to check:
 
+https://fitnesscw.onrender.com
